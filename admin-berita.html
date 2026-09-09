@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin - Upload Berita Penzawa Kemenag Kobar</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            poppins: ['Poppins', 'sans-serif'],
+            inter: ['Inter', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      background-image: url('background.jpeg'); 
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-start p-4 md:p-8 bg-emerald-900/50 font-inter">
+
+  <div class="bg-white/90 backdrop-blur-md border border-white/30 rounded-2xl shadow-2xl p-6 md:p-8 w-full max-w-2xl my-8">
+    
+    <div class="flex justify-between items-center border-b border-gray-200 pb-4 mb-6">
+      <h1 class="text-xl md:text-2xl font-extrabold text-emerald-800 font-poppins">Panel Admin: Upload Berita & Foto</h1>
+      <a href="berita.html" target="_blank" class="text-xs text-emerald-600 hover:underline font-semibold">Lihat Halaman Berita →</a>
+    </div>
+
+    <!-- Form Input Berita dengan Tambahan Upload Foto -->
+    <form id="formBerita" onsubmit="tambahBerita(event)" class="space-y-4">
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Judul Berita</label>
+        <input type="text" id="judulBerita" required placeholder="Masukkan judul berita..." class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none font-medium">
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Tanggal Berita</label>
+        <input type="text" id="tanggalBerita" required placeholder="Contoh: 09 Juni 2026" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none font-medium">
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Upload Foto Kegiatan</label>
+        <input type="file" id="fotoBerita" accept="image/*" class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none bg-white text-sm font-medium">
+        <span class="text-xs text-gray-500 block mt-1">*Format gambar (JPG, PNG, dll)</span>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Isi Berita</label>
+        <textarea id="isiBerita" rows="5" required placeholder="Tulis isi berita di sini..." class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none font-medium"></textarea>
+      </div>
+
+      <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2.5 rounded-lg transition-all shadow-md font-poppins">
+        Publikasikan Berita
+      </button>
+    </form>
+
+    <!-- Daftar Kelola Berita -->
+    <div class="mt-8 pt-6 border-t border-gray-200">
+      <h2 class="text-lg font-bold text-emerald-800 font-poppins mb-4">Dikelola / Hapus Berita</h2>
+      <div id="listAdminBerita" class="space-y-3 max-h-60 overflow-y-auto pr-2">
+        <!-- Javascript akan mengisi bagian ini -->
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Script Admin dengan Konversi Gambar Base64 -->
+  <script>
+    function muatAdminBerita() {
+      const listContainer = document.getElementById('listAdminBerita');
+      let dataBerita = JSON.parse(localStorage.getItem('listBeritaKemenag')) || [];
+
+      listContainer.innerHTML = "";
+      if (dataBerita.length === 0) {
+        listContainer.innerHTML = "<p class='text-sm text-gray-500 text-center'>Belum ada berita tersimpan.</p>";
+        return;
+      }
+
+      dataBerita.forEach((berita, index) => {
+        const item = document.createElement('div');
+        item.className = "flex justify-between items-center p-3 bg-gray-50 border rounded-lg text-sm";
+        item.innerHTML = `
+          <span class="font-medium text-gray-800 truncate max-w-xs">${berita.judul}</span>
+          <button onclick="hapusBerita(${index})" class="px-3 py-1 bg-red-500 hover:bg-red-600 text-white rounded text-xs font-semibold">Hapus</button>
+        `;
+        listContainer.appendChild(item);
+      });
+    }
+
+    function tambahBerita(e) {
+      e.preventDefault();
+      const judul = document.getElementById('judulBerita').value;
+      const tanggal = document.getElementById('tanggalBerita').value;
+      const isi = document.getElementById('isiBerita').value;
+      const fileInput = document.getElementById('fotoBerita');
+
+      let dataBerita = JSON.parse(localStorage.getItem('listBeritaKemenag')) || [];
+
+      if (fileInput.files && fileInput.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(uploadEvent) {
+          const fotoBase64 = uploadEvent.target.result;
+          
+          dataBerita.unshift({ judul, tanggal, isi, foto: fotoBase64 });
+          localStorage.setItem('listBeritaKemenag', JSON.stringify(dataBerita));
+
+          alert("Berita dan foto berhasil dipublikasikan!");
+          document.getElementById('formBerita').reset();
+          muatAdminBerita();
+        };
+        reader.readAsDataURL(fileInput.files[0]);
+      } else {
+        // Jika tidak mengupload foto
+        dataBerita.unshift({ judul, tanggal, isi, foto: "" });
+        localStorage.setItem('listBeritaKemenag', JSON.stringify(dataBerita));
+
+        alert("Berita berhasil dipublikasikan!");
+        document.getElementById('formBerita').reset();
+        muatAdminBerita();
+      }
+    }
+
+    function hapusBerita(index) {
+      if (confirm("Apakah Anda yakin ingin menghapus berita ini?")) {
+        let dataBerita = JSON.parse(localStorage.getItem('listBeritaKemenag')) || [];
+        dataBerita.splice(index, 1);
+        localStorage.setItem('listBeritaKemenag', JSON.stringify(dataBerita));
+        muatAdminBerita();
+      }
+    }
+
+    window.onload = muatAdminBerita;
+  </script>
+</body>
+</html>
