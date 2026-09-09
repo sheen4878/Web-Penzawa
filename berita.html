@@ -10,19 +10,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            poppins: ['Poppins', 'sans-serif'],
-            inter: ['Inter', 'sans-serif'],
-          }
-        }
-      }
-    }
-  </script>
-
   <style>
     body {
       background-image: url('background.jpeg'); 
@@ -47,52 +34,71 @@
       </a>
     </div>
 
-    <!-- Tempat Daftar Berita Ditampilkan -->
+    <!-- Tempat Berita Ditampilkan -->
     <div id="daftarBerita" class="space-y-6">
-      <p class="text-center text-gray-500 py-8">Memuat berita...</p>
+      <p class="text-center text-gray-500 py-8">Memuat berita dari server...</p>
     </div>
 
   </div>
 
-  <!-- Script untuk Merender Berita Beserta Fotonya -->
-  <script>
-    function muatBeritaPublik() {
+  <!-- Firebase Script Terintegrasi -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDmQcyj5v0W9Y_vJI9SyqObMWcxqE4xgMo",
+      authDomain: "web-penzawa.firebaseapp.com",
+      projectId: "web-penzawa",
+      storageBucket: "web-penzawa.firebasestorage.app",
+      messagingSenderId: "335431617279",
+      appId: "1:335431617279:web:1fbaf521074b8855d39aca",
+      measurementId: "G-BYNET2Z5WR"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    async function muatBeritaPublik() {
       const container = document.getElementById('daftarBerita');
-      let dataBerita = JSON.parse(localStorage.getItem('listBeritaKemenag')) || [];
+      
+      try {
+        const q = query(collection(db, "berita"), orderBy("waktuDibuat", "desc"));
+        const querySnapshot = await getDocs(q);
 
-      if (dataBerita.length === 0) {
-        dataBerita = [
-          {
-            judul: "Sosialisasi Pengelolaan Zakat dan Wakaf Tahun 2026",
-            tanggal: "06 Juni 2026",
-            isi: "Penzawa Kemenag Kobar mengadakan kegiatan sosialisasi terkait pentingnya optimalisasi pengumpulan zakat fitrah dan maal bagi pengurus UPZ di wilayah Kabupaten Kotawaringin Barat.",
-            foto: ""
-          }
-        ];
-      }
-
-      container.innerHTML = "";
-      dataBerita.forEach(berita => {
-        const card = document.createElement('div');
-        card.className = "bg-white/90 border border-emerald-100 rounded-xl p-6 shadow-sm hover:shadow-md transition-all";
-        
-        let fotoHtml = "";
-        if (berita.foto) {
-          fotoHtml = `
-            <div class="mb-4 overflow-hidden rounded-lg border border-gray-200 max-h-96 flex justify-center bg-black/5">
-              <img src="${berita.foto}" alt="Foto Kegiatan" class="object-cover w-full max-h-96">
-            </div>
-          `;
+        container.innerHTML = "";
+        if (querySnapshot.empty) {
+          container.innerHTML = "<p class='text-center text-gray-500 py-8'>Belum ada berita yang dipublikasikan.</p>";
+          return;
         }
 
-        card.innerHTML = `
-          <span class="text-xs font-semibold text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full">${berita.tanggal}</span>
-          <h2 class="text-xl font-bold text-emerald-900 font-poppins mt-2 mb-3">${berita.judul}</h2>
-          ${fotoHtml}
-          <p class="text-gray-700 text-sm leading-relaxed whitespace-pre-line">${berita.isi}</p>
-        `;
-        container.appendChild(card);
-      });
+        querySnapshot.forEach((docSnap) => {
+          const berita = docSnap.data();
+          const card = document.createElement('div');
+          card.className = "bg-white/90 border border-emerald-100 rounded-xl p-6 shadow-sm hover:shadow-md transition-all";
+          
+          let fotoHtml = "";
+          if (berita.foto) {
+            fotoHtml = `
+              <div class="mb-4 overflow-hidden rounded-lg border border-gray-200 max-h-96 flex justify-center bg-black/5">
+                <img src="${berita.foto}" alt="Foto Kegiatan" class="object-cover w-full max-h-96">
+              </div>
+            `;
+          }
+
+          card.innerHTML = `
+            <span class="text-xs font-semibold text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full">${berita.tanggal}</span>
+            <h2 class="text-xl font-bold text-emerald-900 font-poppins mt-2 mb-3">${berita.judul}</h2>
+            ${fotoHtml}
+            <p class="text-gray-700 text-sm leading-relaxed whitespace-pre-line">${berita.isi}</p>
+          `;
+          container.appendChild(card);
+        });
+
+      } catch (error) {
+        console.error("Gagal mengambil berita:", error);
+        container.innerHTML = "<p class='text-center text-red-500 py-8'>Gagal memuat berita dari server.</p>";
+      }
     }
 
     window.onload = muatBeritaPublik;
