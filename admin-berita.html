@@ -29,7 +29,6 @@
     
     <div class="flex flex-col md:flex-row justify-between items-center border-b border-gray-200 pb-4 mb-6 gap-4">
       <h1 class="text-xl md:text-2xl font-extrabold text-emerald-800 font-poppins">Panel Admin Terpadu</h1>
-      
       <div class="flex space-x-3 items-center">
         <a href="index.html" target="_blank" class="text-xs px-4 py-2 bg-emerald-100 text-emerald-800 rounded-lg hover:bg-emerald-200 font-semibold transition-colors">Lihat Website →</a>
         <button id="btnLogout" class="text-xs px-4 py-2 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 font-semibold transition-colors shadow-sm">
@@ -45,62 +44,86 @@
       <button onclick="switchTab('regulasi')" id="tab-regulasi" class="px-4 py-2 rounded-t-lg bg-gray-200 text-gray-600 hover:bg-gray-300 font-semibold text-sm whitespace-nowrap">Kelola Regulasi</button>
     </div>
 
-    <!-- ========================================== -->
-    <!-- TAB 1: BERITA -->
-    <!-- ========================================== -->
+    <!-- ============================================== -->
+    <!-- TAB 1: BERITA                                  -->
+    <!-- ============================================== -->
     <div id="content-berita" class="tab-content active">
-      <form id="formBerita" onsubmit="tambahBerita(event)" class="space-y-4">
-        <div><label class="block text-sm font-medium mb-1">Judul Berita</label><input type="text" id="judulBerita" required class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none"></div>
-        <div><label class="block text-sm font-medium mb-1">Tanggal</label><input type="text" id="tanggalBerita" required class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none"></div>
-        <div><label class="block text-sm font-medium mb-1">Upload Foto</label><input type="file" id="fotoBerita" accept="image/*" class="w-full px-3 py-2 border rounded-lg bg-white"></div>
+      <form id="formBerita" onsubmit="simpanBerita(event)" class="space-y-4">
+        <div><label class="block text-sm font-medium mb-1">Judul Berita</label><input type="text" id="judulBerita" required class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500"></div>
+        <div><label class="block text-sm font-medium mb-1">Tanggal</label><input type="text" id="tanggalBerita" required class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500"></div>
+        <div>
+          <label class="block text-sm font-medium mb-1">Upload Foto</label>
+          <input type="file" id="fotoBerita" accept="image/*" class="w-full px-3 py-2 border rounded-lg bg-white text-sm">
+          <span class="text-xs text-gray-500">*Abaikan jika tidak ingin mengganti foto saat Edit</span>
+        </div>
         <div><label class="block text-sm font-medium mb-1">Isi Berita</label><textarea id="isiBerita" rows="4" required class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500"></textarea></div>
-        <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 transition-colors text-white font-semibold py-2.5 rounded-lg">Publikasikan Berita</button>
+        
+        <div class="flex gap-2">
+          <button type="submit" id="btnSubmitBerita" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2.5 rounded-lg">Publikasikan Berita</button>
+          <button type="button" id="btnBatalBerita" onclick="batalEdit('berita')" class="hidden px-4 bg-gray-400 hover:bg-gray-500 text-white font-semibold rounded-lg">Batal</button>
+        </div>
       </form>
-      <!-- Daftar Berita yang sudah diupload -->
+
       <div class="mt-8 pt-6 border-t border-gray-200">
-        <h2 class="text-lg font-bold text-emerald-800 font-poppins mb-4">Daftar Berita Tersimpan</h2>
+        <h2 class="text-lg font-bold text-emerald-800 font-poppins mb-4">Daftar Berita Terupload</h2>
         <div id="listAdminBerita" class="space-y-3 max-h-60 overflow-y-auto pr-2"></div>
       </div>
     </div>
 
-    <!-- ========================================== -->
-    <!-- TAB 2: PEGAWAI -->
-    <!-- ========================================== -->
+    <!-- ============================================== -->
+    <!-- TAB 2: PEGAWAI                                 -->
+    <!-- ============================================== -->
     <div id="content-pegawai" class="tab-content">
-      <form id="formPegawai" onsubmit="tambahPegawai(event)" class="space-y-4">
+      <form id="formPegawai" onsubmit="simpanPegawai(event)" class="space-y-4">
         <div><label class="block text-sm font-medium mb-1">Nama Pegawai</label><input type="text" id="namaPegawai" required class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500"></div>
         <div><label class="block text-sm font-medium mb-1">NIP</label><input type="text" id="nipPegawai" required class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500"></div>
         <div><label class="block text-sm font-medium mb-1">Jabatan</label><input type="text" id="jabatanPegawai" required class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500"></div>
-        <div><label class="block text-sm font-medium mb-1">Foto Pegawai</label><input type="file" id="fotoPegawai" accept="image/*" class="w-full px-3 py-2 border rounded-lg bg-white"></div>
-        <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 transition-colors text-white font-semibold py-2.5 rounded-lg">Simpan Pegawai</button>
+        <div>
+          <label class="block text-sm font-medium mb-1">Foto Pegawai</label>
+          <input type="file" id="fotoPegawai" accept="image/*" class="w-full px-3 py-2 border rounded-lg bg-white text-sm">
+          <span class="text-xs text-gray-500">*Abaikan jika tidak ingin mengganti foto saat Edit</span>
+        </div>
+        
+        <div class="flex gap-2">
+          <button type="submit" id="btnSubmitPegawai" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2.5 rounded-lg">Simpan Pegawai</button>
+          <button type="button" id="btnBatalPegawai" onclick="batalEdit('pegawai')" class="hidden px-4 bg-gray-400 hover:bg-gray-500 text-white font-semibold rounded-lg">Batal</button>
+        </div>
       </form>
-      <!-- Daftar Pegawai yang sudah diupload -->
+
       <div class="mt-8 pt-6 border-t border-gray-200">
-        <h2 class="text-lg font-bold text-emerald-800 font-poppins mb-4">Daftar Pegawai Tersimpan</h2>
+        <h2 class="text-lg font-bold text-emerald-800 font-poppins mb-4">Daftar Pegawai Terupload</h2>
         <div id="listAdminPegawai" class="space-y-3 max-h-60 overflow-y-auto pr-2"></div>
       </div>
     </div>
 
-    <!-- ========================================== -->
-    <!-- TAB 3: REGULASI -->
-    <!-- ========================================== -->
+    <!-- ============================================== -->
+    <!-- TAB 3: REGULASI                                -->
+    <!-- ============================================== -->
     <div id="content-regulasi" class="tab-content">
-      <form id="formRegulasi" onsubmit="tambahRegulasi(event)" class="space-y-4">
+      <form id="formRegulasi" onsubmit="simpanRegulasi(event)" class="space-y-4">
         <div><label class="block text-sm font-medium mb-1">Judul Regulasi</label><input type="text" id="judulRegulasi" required class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500"></div>
         <div><label class="block text-sm font-medium mb-1">Tahun/Nomor</label><input type="text" id="nomorRegulasi" required class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500"></div>
-        <div><label class="block text-sm font-medium mb-1">File Regulasi (PDF/DOC)</label><input type="file" id="fileRegulasi" class="w-full px-3 py-2 border rounded-lg bg-white"></div>
-        <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 transition-colors text-white font-semibold py-2.5 rounded-lg">Upload Regulasi</button>
+        <div>
+          <label class="block text-sm font-medium mb-1">File Regulasi (PDF/DOC)</label>
+          <input type="file" id="fileRegulasi" class="w-full px-3 py-2 border rounded-lg bg-white text-sm">
+          <span class="text-xs text-gray-500">*Abaikan jika tidak ingin mengganti file saat Edit</span>
+        </div>
+        
+        <div class="flex gap-2">
+          <button type="submit" id="btnSubmitRegulasi" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2.5 rounded-lg">Upload Regulasi</button>
+          <button type="button" id="btnBatalRegulasi" onclick="batalEdit('regulasi')" class="hidden px-4 bg-gray-400 hover:bg-gray-500 text-white font-semibold rounded-lg">Batal</button>
+        </div>
       </form>
-      <!-- Daftar Regulasi yang sudah diupload -->
+
       <div class="mt-8 pt-6 border-t border-gray-200">
-        <h2 class="text-lg font-bold text-emerald-800 font-poppins mb-4">Daftar Regulasi Tersimpan</h2>
+        <h2 class="text-lg font-bold text-emerald-800 font-poppins mb-4">Daftar Regulasi Terupload</h2>
         <div id="listAdminRegulasi" class="space-y-3 max-h-60 overflow-y-auto pr-2"></div>
       </div>
     </div>
 
   </div>
 
-  <!-- SCRIPT FIREBASE LOGIN -->
+  <!-- FIREBASE AUTH -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
@@ -119,123 +142,233 @@
     const auth = getAuth(app);
 
     onAuthStateChanged(auth, (user) => {
-      if (!user) {
-        window.location.href = 'login.html';
-      } else {
-        document.body.style.visibility = 'visible';
-        muatSemuaData(); // Panggil data saat user dikonfirmasi berhasil login
-      }
+      if (!user) { window.location.href = 'login.html'; } 
+      else { document.body.style.visibility = 'visible'; }
     });
 
     document.getElementById('btnLogout').addEventListener('click', () => {
-      if(confirm("Apakah Anda yakin ingin keluar dari Panel Admin?")) {
-        signOut(auth).then(() => window.location.href = 'login.html');
+      if(confirm("Keluar dari Panel Admin?")) {
+        signOut(auth).then(() => { window.location.href = 'login.html'; });
       }
     });
   </script>
 
-  <!-- SCRIPT KELOLA DATA (CRUD) -->
+  <!-- LOGIKA CRUD (CREATE, READ, UPDATE, DELETE) -->
   <script>
+    // Variabel penyimpan index edit (-1 artinya mode Tambah Baru)
+    let editIndexBerita = -1;
+    let editIndexPegawai = -1;
+    let editIndexRegulasi = -1;
+
+    // ----- FUNGSI TAB & RESET -----
     function switchTab(tabId) {
       ['berita', 'pegawai', 'regulasi'].forEach(id => {
         document.getElementById('content-' + id).classList.remove('active');
         document.getElementById('tab-' + id).classList.replace('bg-emerald-600', 'bg-gray-200');
         document.getElementById('tab-' + id).classList.replace('text-white', 'text-gray-600');
+        batalEdit(id); // Batalkan mode edit jika pindah tab
       });
       document.getElementById('content-' + tabId).classList.add('active');
       document.getElementById('tab-' + tabId).classList.replace('bg-gray-200', 'bg-emerald-600');
       document.getElementById('tab-' + tabId).classList.replace('text-gray-600', 'text-white');
     }
 
-    // FUNGSI TAMPILKAN DAFTAR DATA
-    function muatSemuaData() {
-      tampilkanList('listBeritaKemenag', 'listAdminBerita', 'judul', 'Belum ada berita tersimpan.');
-      tampilkanList('listPegawaiKemenag', 'listAdminPegawai', 'nama', 'Belum ada data pegawai tersimpan.');
-      tampilkanList('listRegulasiKemenag', 'listAdminRegulasi', 'judul', 'Belum ada regulasi tersimpan.');
+    function batalEdit(tipe) {
+      if(tipe === 'berita') {
+        editIndexBerita = -1;
+        document.getElementById('formBerita').reset();
+        document.getElementById('btnSubmitBerita').innerText = "Publikasikan Berita";
+        document.getElementById('btnBatalBerita').classList.add('hidden');
+      } else if (tipe === 'pegawai') {
+        editIndexPegawai = -1;
+        document.getElementById('formPegawai').reset();
+        document.getElementById('btnSubmitPegawai').innerText = "Simpan Pegawai";
+        document.getElementById('btnBatalPegawai').classList.add('hidden');
+      } else if (tipe === 'regulasi') {
+        editIndexRegulasi = -1;
+        document.getElementById('formRegulasi').reset();
+        document.getElementById('btnSubmitRegulasi').innerText = "Upload Regulasi";
+        document.getElementById('btnBatalRegulasi').classList.add('hidden');
+      }
     }
 
-    function tampilkanList(storageKey, containerId, titleKey, emptyMsg) {
-      const container = document.getElementById(containerId);
-      let data = JSON.parse(localStorage.getItem(storageKey)) || [];
+    // ----- BAGIAN BERITA -----
+    function muatBerita() {
+      const container = document.getElementById('listAdminBerita');
+      let data = JSON.parse(localStorage.getItem('listBeritaKemenag')) || [];
+      container.innerHTML = data.length === 0 ? "<p class='text-sm text-gray-500'>Belum ada berita tersimpan.</p>" : "";
       
-      container.innerHTML = "";
-      if (data.length === 0) {
-        container.innerHTML = `<p class='text-sm text-gray-500'>${emptyMsg}</p>`;
-        return;
-      }
-
       data.forEach((item, index) => {
         container.innerHTML += `
-          <div class="flex justify-between items-center p-3 bg-gray-50 border rounded-lg text-sm">
-            <span class="font-medium text-gray-800 truncate max-w-xs">${item[titleKey]}</span>
-            <button onclick="hapusData('${storageKey}', ${index})" class="px-3 py-1 bg-red-500 hover:bg-red-600 text-white rounded text-xs font-semibold">Hapus</button>
+          <div class="flex justify-between items-center p-3 bg-gray-50 border border-gray-200 rounded-lg text-sm mb-2">
+            <span class="font-medium text-gray-800 truncate w-1/2">${item.judul}</span>
+            <div class="space-x-1 shrink-0">
+              <button onclick="editBerita(${index})" class="px-3 py-1 bg-blue-500 hover:bg-blue-600 text-white rounded font-semibold text-xs transition-colors">Edit</button>
+              <button onclick="hapusData('listBeritaKemenag', ${index}, muatBerita)" class="px-3 py-1 bg-red-500 hover:bg-red-600 text-white rounded font-semibold text-xs transition-colors">Hapus</button>
+            </div>
           </div>
         `;
       });
     }
 
-    // FUNGSI HAPUS DATA
-    function hapusData(storageKey, index) {
-      if (confirm("Apakah Anda yakin ingin menghapus data ini?")) {
-        let data = JSON.parse(localStorage.getItem(storageKey)) || [];
-        data.splice(index, 1);
-        localStorage.setItem(storageKey, JSON.stringify(data));
-        muatSemuaData(); // Refresh daftar setelah dihapus
-        alert("Data berhasil dihapus.");
-      }
+    function editBerita(index) {
+      let data = JSON.parse(localStorage.getItem('listBeritaKemenag')) || [];
+      let item = data[index];
+      document.getElementById('judulBerita').value = item.judul;
+      document.getElementById('tanggalBerita').value = item.tanggal;
+      document.getElementById('isiBerita').value = item.isi;
+      
+      editIndexBerita = index;
+      document.getElementById('btnSubmitBerita').innerText = "Simpan Perubahan Berita";
+      document.getElementById('btnBatalBerita').classList.remove('hidden');
     }
 
-    // FUNGSI TAMBAH DATA
-    function tambahBerita(e) {
+    function simpanBerita(e) {
       e.preventDefault();
-      simpanData('listBeritaKemenag', {
+      let data = JSON.parse(localStorage.getItem('listBeritaKemenag')) || [];
+      const input = {
         judul: document.getElementById('judulBerita').value,
         tanggal: document.getElementById('tanggalBerita').value,
         isi: document.getElementById('isiBerita').value
-      }, document.getElementById('fotoBerita').files[0], 'formBerita');
+      };
+      prosesSimpan('listBeritaKemenag', data, editIndexBerita, input, 'fotoBerita', 'foto', muatBerita, 'berita');
     }
 
-    function tambahPegawai(e) {
+    // ----- BAGIAN PEGAWAI -----
+    function muatPegawai() {
+      const container = document.getElementById('listAdminPegawai');
+      let data = JSON.parse(localStorage.getItem('listPegawaiKemenag')) || [];
+      container.innerHTML = data.length === 0 ? "<p class='text-sm text-gray-500'>Belum ada pegawai tersimpan.</p>" : "";
+      
+      data.forEach((item, index) => {
+        container.innerHTML += `
+          <div class="flex justify-between items-center p-3 bg-gray-50 border border-gray-200 rounded-lg text-sm mb-2">
+            <span class="font-medium text-gray-800 truncate w-1/2">${item.nama} - ${item.jabatan}</span>
+            <div class="space-x-1 shrink-0">
+              <button onclick="editPegawai(${index})" class="px-3 py-1 bg-blue-500 hover:bg-blue-600 text-white rounded font-semibold text-xs transition-colors">Edit</button>
+              <button onclick="hapusData('listPegawaiKemenag', ${index}, muatPegawai)" class="px-3 py-1 bg-red-500 hover:bg-red-600 text-white rounded font-semibold text-xs transition-colors">Hapus</button>
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    function editPegawai(index) {
+      let data = JSON.parse(localStorage.getItem('listPegawaiKemenag')) || [];
+      let item = data[index];
+      document.getElementById('namaPegawai').value = item.nama;
+      document.getElementById('nipPegawai').value = item.nip;
+      document.getElementById('jabatanPegawai').value = item.jabatan;
+      
+      editIndexPegawai = index;
+      document.getElementById('btnSubmitPegawai').innerText = "Simpan Perubahan Pegawai";
+      document.getElementById('btnBatalPegawai').classList.remove('hidden');
+    }
+
+    function simpanPegawai(e) {
       e.preventDefault();
-      simpanData('listPegawaiKemenag', {
+      let data = JSON.parse(localStorage.getItem('listPegawaiKemenag')) || [];
+      const input = {
         nama: document.getElementById('namaPegawai').value,
         nip: document.getElementById('nipPegawai').value,
         jabatan: document.getElementById('jabatanPegawai').value
-      }, document.getElementById('fotoPegawai').files[0], 'formPegawai');
+      };
+      prosesSimpan('listPegawaiKemenag', data, editIndexPegawai, input, 'fotoPegawai', 'file', muatPegawai, 'pegawai');
     }
 
-    function tambahRegulasi(e) {
+    // ----- BAGIAN REGULASI -----
+    function muatRegulasi() {
+      const container = document.getElementById('listAdminRegulasi');
+      let data = JSON.parse(localStorage.getItem('listRegulasiKemenag')) || [];
+      container.innerHTML = data.length === 0 ? "<p class='text-sm text-gray-500'>Belum ada regulasi tersimpan.</p>" : "";
+      
+      data.forEach((item, index) => {
+        container.innerHTML += `
+          <div class="flex justify-between items-center p-3 bg-gray-50 border border-gray-200 rounded-lg text-sm mb-2">
+            <span class="font-medium text-gray-800 truncate w-1/2">${item.judul}</span>
+            <div class="space-x-1 shrink-0">
+              <button onclick="editRegulasi(${index})" class="px-3 py-1 bg-blue-500 hover:bg-blue-600 text-white rounded font-semibold text-xs transition-colors">Edit</button>
+              <button onclick="hapusData('listRegulasiKemenag', ${index}, muatRegulasi)" class="px-3 py-1 bg-red-500 hover:bg-red-600 text-white rounded font-semibold text-xs transition-colors">Hapus</button>
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    function editRegulasi(index) {
+      let data = JSON.parse(localStorage.getItem('listRegulasiKemenag')) || [];
+      let item = data[index];
+      document.getElementById('judulRegulasi').value = item.judul;
+      document.getElementById('nomorRegulasi').value = item.nomor;
+      
+      editIndexRegulasi = index;
+      document.getElementById('btnSubmitRegulasi').innerText = "Simpan Perubahan Regulasi";
+      document.getElementById('btnBatalRegulasi').classList.remove('hidden');
+    }
+
+    function simpanRegulasi(e) {
       e.preventDefault();
-      simpanData('listRegulasiKemenag', {
+      let data = JSON.parse(localStorage.getItem('listRegulasiKemenag')) || [];
+      const input = {
         judul: document.getElementById('judulRegulasi').value,
         nomor: document.getElementById('nomorRegulasi').value
-      }, document.getElementById('fileRegulasi').files[0], 'formRegulasi');
+      };
+      prosesSimpan('listRegulasiKemenag', data, editIndexRegulasi, input, 'fileRegulasi', 'file', muatRegulasi, 'regulasi');
     }
 
-    function simpanData(storageKey, dataObj, fileInput, formId) {
-      let dataStore = JSON.parse(localStorage.getItem(storageKey)) || [];
-      if (fileInput) {
-        const reader = new FileReader();
-        reader.onload = function(evt) {
-          dataObj.file = evt.target.result;
-          dataObj.foto = evt.target.result; // Menyesuaikan dengan format berita sebelumnya
-          dataStore.unshift(dataObj);
-          localStorage.setItem(storageKey, JSON.stringify(dataStore));
-          alert("Data berhasil disimpan!");
-          document.getElementById(formId).reset();
-          muatSemuaData(); // Refresh daftar setelah ditambah
-        };
-        reader.readAsDataURL(fileInput);
-      } else {
-        dataObj.file = "";
-        dataObj.foto = "";
-        dataStore.unshift(dataObj);
-        localStorage.setItem(storageKey, JSON.stringify(dataStore));
-        alert("Data berhasil disimpan!");
-        document.getElementById(formId).reset();
-        muatSemuaData(); // Refresh daftar setelah ditambah
+    // ----- HELPER GLOBAL (PROSES SIMPAN & HAPUS) -----
+    function hapusData(storageKey, index, fungsiMuat) {
+      if (confirm("Yakin ingin menghapus data ini?")) {
+        let data = JSON.parse(localStorage.getItem(storageKey)) || [];
+        data.splice(index, 1);
+        localStorage.setItem(storageKey, JSON.stringify(data));
+        fungsiMuat();
       }
     }
+
+    function prosesSimpan(storageKey, dataStore, editIndex, inputData, idFileInput, keyFile, fungsiMuat, tipe) {
+      const fileInput = document.getElementById(idFileInput);
+      const eksekusi = (fileBase64) => {
+        inputData[keyFile] = fileBase64; // Masukkan file ke objek data
+        
+        if (editIndex > -1) {
+          // Jika mode Edit, ganti data lama di posisi index tersebut
+          dataStore[editIndex] = inputData;
+          alert("Perubahan berhasil disimpan!");
+        } else {
+          // Jika mode Tambah, masukkan ke urutan paling atas
+          dataStore.unshift(inputData);
+          alert("Data baru berhasil ditambahkan!");
+        }
+        
+        localStorage.setItem(storageKey, JSON.stringify(dataStore));
+        batalEdit(tipe); // Reset form dan index edit
+        fungsiMuat(); // Refresh daftar UI
+      };
+
+      if (fileInput.files && fileInput.files[0]) {
+        // Jika ada file/foto diupload (baik saat edit/tambah baru)
+        const reader = new FileReader();
+        reader.onload = (evt) => eksekusi(evt.target.result);
+        reader.readAsDataURL(fileInput.files[0]);
+      } else {
+        // Jika tidak ada file diupload
+        if (editIndex > -1) {
+          // Jika sedang Edit tapi foto dibiarkan kosong, ambil foto lama dari database agar tidak hilang
+          eksekusi(dataStore[editIndex][keyFile]);
+        } else {
+          // Jika Tambah Baru dan tidak ada foto
+          eksekusi("");
+        }
+      }
+    }
+
+    // Panggil fungsi render daftar saat halaman pertama kali termuat
+    window.onload = () => {
+      muatBerita();
+      muatPegawai();
+      muatRegulasi();
+    };
   </script>
 </body>
 </html>
