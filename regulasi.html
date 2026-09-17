@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kumpulan Regulasi - Penzawa Kemenag Kobar</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen flex flex-col bg-gray-50 font-inter">
+
+ <!-- =============================== -->
+  <!-- HEADER / NAVBAR ATAS            -->
+  <!-- =============================== -->
+  <header class="bg-white shadow-sm sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-20 gap-4">
+        
+        <!-- LOGO KIRI -->
+        <!-- Menggunakan flex-1 agar merespons ruang dengan otomatis -->
+        <div class="flex flex-1 items-center space-x-3">
+          <img src="Logo_Kemenag.png" alt="Logo Kemenag" class="h-12 w-auto object-contain" onerror="this.src='https://via.placeholder.com/48'">
+          <div>
+            <!-- Tambahan 'whitespace-nowrap' agar tulisan dipaksa 1 baris -->
+            <span class="text-lg md:text-xl font-bold text-emerald-900 font-poppins block leading-tight whitespace-nowrap">Penzawa Kemenag Kobar</span>
+            <span class="text-xs text-gray-500 font-medium whitespace-nowrap">Penyelenggara Zakat & Wakaf</span>
+          </div>
+        </div>
+
+        <!-- MENU TENGAH -->
+        <!-- Menggunakan flex-none agar ukurannya paten di tengah -->
+        <nav class="hidden md:flex flex-none justify-center items-center space-x-8 font-poppins text-sm font-semibold text-gray-700">
+          <a href="index.html" class="hover:text-emerald-600 transition-colors">Home</a>
+          <a href="berita.html" class="hover:text-emerald-600 transition-colors">Berita</a>
+          <a href="informasi_pegawai.html" class="hover:text-emerald-600 transition-colors">Informasi Pegawai</a>
+          <a href="regulasi.html" class="hover:text-emerald-600 transition-colors">Regulasi</a>
+        </nav>
+
+        <!-- TOMBOL KANAN (HUBUNGI KAMI) -->
+        <!-- Menggunakan flex-1 dan justify-end agar menyeimbangkan porsi logo kiri -->
+        <div class="flex flex-1 items-center justify-end">
+          <button onclick="document.getElementById('modalKontak').classList.remove('hidden')" class="bg-emerald-600 hover:bg-emerald-700 text-white font-poppins text-sm font-semibold px-4 py-2 rounded-lg transition-all shadow-sm whitespace-nowrap">
+            Hubungi Kami
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- KONTEN UTAMA -->
+  <main class="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <div class="mb-10 text-center md:text-left border-b border-gray-200 pb-6">
+      <h1 class="text-3xl font-extrabold text-emerald-900 font-poppins">Kumpulan Regulasi</h1>
+      <p class="text-gray-500 mt-2">Daftar peraturan, perundang-undangan, dan dokumen regulasi terkait Penyelenggaraan Zakat & Wakaf.</p>
+    </div>
+
+    <div id="daftarRegulasi" class="space-y-4">
+      <p class="text-center text-gray-500 py-8">Memuat data regulasi...</p>
+    </div>
+  </main>
+
+  <!-- MODAL HUBUNGI KAMI -->
+  <div id="modalKontak" class="hidden fixed inset-0 bg-black/60 z-[100] flex items-center justify-center p-4 backdrop-blur-sm">
+    <div class="bg-white rounded-2xl shadow-2xl p-6 md:p-8 w-full max-w-md relative">
+      <button onclick="document.getElementById('modalKontak').classList.add('hidden')" class="absolute top-4 right-4 text-gray-400 hover:text-red-500 font-bold text-lg">✕</button>
+      <h2 class="text-2xl font-bold text-emerald-800 mb-6 font-poppins">Informasi & Kontak</h2>
+      <div class="space-y-4 text-sm text-gray-700">
+        <div class="bg-emerald-50 p-4 rounded-xl border border-emerald-100">
+          <p class="font-bold text-emerald-900 mb-1">Nomor Layanan / Pegawai</p>
+          <p>📞 +62 812-3456-7890 (Bpk. Admin Penzawa)</p>
+          <p>📞 +62 898-7654-3210 (Ibu Staff)</p>
+        </div>
+        <div class="bg-gray-50 p-4 rounded-xl border border-gray-100">
+          <p class="font-bold text-gray-900 mb-1">Media Sosial Instansi</p>
+          <p>🌐 <strong>Instagram:</strong> @penzawakobar</p>
+          <p>🌐 <strong>Facebook:</strong> Penzawa Kemenag Kobar</p>
+          <p>📧 <strong>Email:</strong> kobar@kemenag.go.id</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="bg-white border-t border-gray-200 py-6 mt-auto">
+    <div class="max-w-7xl mx-auto px-4 text-center text-sm text-gray-500 font-inter">
+      © 2026 Penzawa Kemenag Kobar. Hak Cipta Dilindungi.
+    </div>
+  </footer>
+
+  <script>
+    function muatRegulasi() {
+      const container = document.getElementById('daftarRegulasi');
+      let dataRegulasi = JSON.parse(localStorage.getItem('listRegulasiKemenag')) || [];
+
+      if (dataRegulasi.length === 0) {
+        container.innerHTML = `
+          <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-8 text-center">
+            <h2 class="text-lg font-bold text-gray-600 font-poppins">Belum ada regulasi yang diunggah.</h2>
+            <p class="text-gray-500 mt-1 text-sm">Regulasi yang ditambahkan melalui panel admin akan muncul di sini.</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = "";
+      
+      dataRegulasi.forEach(regulasi => {
+        let tombolDownload = "";
+        if (regulasi.file) {
+          tombolDownload = `
+            <a href="${regulasi.file}" download="${regulasi.judul}" class="inline-flex items-center px-4 py-2 bg-emerald-100 hover:bg-emerald-200 text-emerald-800 text-sm font-semibold rounded-lg transition-colors border border-emerald-200">
+              <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+              Unduh Dokumen
+            </a>
+          `;
+        } else {
+            tombolDownload = `<span class="text-xs text-gray-400 italic">File tidak dilampirkan</span>`;
+        }
+
+        container.innerHTML += `
+          <div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm hover:shadow-md transition-all flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <div>
+              <span class="inline-block px-2.5 py-1 bg-gray-100 text-gray-600 text-xs font-bold rounded-md mb-2">
+                Nomor/Tahun: ${regulasi.nomor}
+              </span>
+              <h2 class="text-lg font-bold text-gray-900 font-poppins leading-snug">${regulasi.judul}</h2>
+            </div>
+            <div class="shrink-0 mt-2 md:mt-0">
+              ${tombolDownload}
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    window.onload = muatRegulasi;
+  </script>
+</body>
+</html>
